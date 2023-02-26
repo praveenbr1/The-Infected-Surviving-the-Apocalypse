@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class EnemyAI : MonoBehaviour
 {
     NavMeshAgent myNavagent;
     [SerializeField] Transform targetPlayer;
     [SerializeField] float enemyChaseRange = 7f;
-    float disttanceToTarget = 0f;
+    float distanceToTarget = 0f;
+    bool isProvoked;
     void Start()
     {
         myNavagent = GetComponent<NavMeshAgent>();
@@ -18,12 +20,37 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        disttanceToTarget = Vector3.Distance(targetPlayer.position, transform.position);
-        if(disttanceToTarget <= enemyChaseRange)
+        distanceToTarget = Vector3.Distance(targetPlayer.position, transform.position);
+
+        if(isProvoked)
+        {
+            ChaseTarget();
+        }
+
+        else if(distanceToTarget <= enemyChaseRange)
+        {
+            isProvoked= true;
+        }
+      
+        
+    }
+
+    private void ChaseTarget()
+    {
+       if(distanceToTarget >= myNavagent.stoppingDistance)
         {
             myNavagent.SetDestination(targetPlayer.position);
         }
-        
+
+       else if(distanceToTarget <= myNavagent.stoppingDistance) 
+        {
+            AttackTarget();
+        }
+    }
+
+    private void AttackTarget()
+    {
+        Debug.Log($"{name} caught me {targetPlayer.name}");
     }
 
     private void OnDrawGizmosSelected()

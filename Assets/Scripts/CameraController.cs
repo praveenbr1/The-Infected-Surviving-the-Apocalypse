@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
     [SerializeField] float sensitivity = 5.0f;
-   // [SerializeField] float maxYAngle = 90.0f;
+   
     [SerializeField] Vector3 offset = new Vector3(0, 1, -3);
     [SerializeField] Transform playerTransform;
+  
 
     private Vector2 currentRotation;
 
     private void Awake()
     {
-        StartCoroutine(ResetCameraRotation());
+        
     }
 
     private void Start()
@@ -24,23 +26,16 @@ public class CameraController : MonoBehaviour
         
     }
 
-    IEnumerator ResetCameraRotation()
-    {
-        Quaternion initialRotation = transform.rotation;
-        transform.rotation = Quaternion.Euler(0, 0, 0); // set to face forward
-
-        yield return new WaitForSeconds(7); // wait for 3 seconds
-
-        transform.rotation = initialRotation; // restore the original rotation
-
-}
+ 
 
         void Update()
        {
          float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        
 
         currentRotation.x += mouseX;
-        currentRotation.y = 0;
+         currentRotation.y = 0;
+  
 
         transform.eulerAngles = new Vector3(currentRotation.y, currentRotation.x, 0);
         transform.position = playerTransform.position + offset;

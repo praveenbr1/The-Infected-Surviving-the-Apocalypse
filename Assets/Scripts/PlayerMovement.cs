@@ -1,55 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float jumpSpeed;
     [SerializeField] float moveSpeed = 5.0f;
-   
+    [SerializeField] LayerMask groundMask;
+
     public CameraController cameraController;
     private CharacterController characterController;
-    float gravity = -9.81f;
+    private bool isGrounded;
+    RaycastHit hit;
 
-    Vector3 gravitatinalForce;
-    [SerializeField] Transform groundCheck;
-    float groundDistance = 0.1f;
-    [SerializeField] LayerMask groundMask;
-    bool touchesGround;
+    private Vector3 moveDirection;
+    private float verticalVelocity = 0f;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        
-
     }
 
-    void Update()
+    private void Update()
     {
-        GravityCheck();
-
         CharacterMovement();
-
         CharacterJump();
-        transform.rotation = Quaternion.Euler(0, cameraController.transform.rotation.eulerAngles.y, 0);
-    }
-
-    private void CharacterJump()
-    {
-        if (Input.GetButtonDown("Jump") && touchesGround)
-        {
-            gravitatinalForce.y = Mathf.Sqrt(jumpSpeed * -2f * gravity);
-        }
-    }
-
-    private void GravityCheck()
-    {
-        touchesGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (touchesGround && gravitatinalForce.y < 0)
-        {
-            gravitatinalForce.y = -2f;
-        }
-        gravitatinalForce.y += gravity * Time.deltaTime;
     }
 
     private void CharacterMovement()
@@ -65,10 +41,33 @@ public class PlayerMovement : MonoBehaviour
         Quaternion cameraHorizontalRotation = Quaternion.Euler(0, cameraController.transform.rotation.eulerAngles.y, 0);
         transform.rotation = cameraHorizontalRotation;
 
-        Vector3 moveDirection = direction * moveSpeed * Time.deltaTime;
-        characterController.Move(moveDirection);
-        characterController.Move(gravitatinalForce * Time.deltaTime);
+        moveDirection = direction * moveSpeed;
 
+        // Apply gravity
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
+        verticalVelocity += Physics.gravity.y * Time.deltaTime;
 
+        // Combine movement and gravity
+        moveDirection.y = verticalVelocity;
+
+        characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void CharacterJump()
+    {
+        if (isGrounded && Input.GetButtonDown("Jump"))
+        {
+            verticalVelocity = Mathf.Sqrt(jumpSpeed * -2f * Physics.gravity.y);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        //You can write below code also instead of RayCast...
+        // isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f, groundMask);
     }
 }

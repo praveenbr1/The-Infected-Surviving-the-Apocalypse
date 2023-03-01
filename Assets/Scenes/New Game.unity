@@ -2066,6 +2066,19 @@ MonoBehaviour:
   sparkLight: {fileID: 1330139533}
   hitRange: 100
   damageAmount: 50
+--- !u!114 &1178155892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553219780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5881a203fb1604eb121d28815ae852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrfeab: {fileID: 9156563657551511987, guid: 14155155dc76b954b9ddcd3c9d11e438, type: 3}
 --- !u!4 &1188052376 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3183749884578473501, guid: df61564f564948d4e8449841379fa597, type: 3}
@@ -3027,12 +3040,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 215469468}
     - target: {fileID: 8332186512954514259, guid: 0f05046a456d6e046865db1fa1b7b382, type: 3}
+      propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332186512954514259, guid: 0f05046a456d6e046865db1fa1b7b382, type: 3}
       propertyPath: field of view
       value: 60.6
       objectReference: {fileID: 0}
     - target: {fileID: 8332186512954514259, guid: 0f05046a456d6e046865db1fa1b7b382, type: 3}
       propertyPath: m_FOVAxisMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332186512954514259, guid: 0f05046a456d6e046865db1fa1b7b382, type: 3}
+      propertyPath: m_RenderingPath
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8332186512954514259, guid: 0f05046a456d6e046865db1fa1b7b382, type: 3}
       propertyPath: near clip plane

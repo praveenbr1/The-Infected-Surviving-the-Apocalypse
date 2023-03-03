@@ -11,6 +11,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     Animator myAnimator;
 
+    private bool isFiring = false;
+    private float firingTimer = 0.0f;
+
 
     public CameraController cameraController;
     private CharacterController characterController;
@@ -39,15 +42,39 @@ public class PlayerMovement : MonoBehaviour
 
     private void Firing()
     {
-       if(Input.GetMouseButtonDown(0)) 
+        /* if(Input.GetMouseButtonDown(0)) 
+          {
+              myAnimator.SetBool("isFiring", true);
+
+          }
+         else if(Input.GetMouseButtonUp(0)) 
+          {
+              myAnimator.SetBool("isFiring", false);
+          } */
+
+        if (Input.GetMouseButtonDown(0))
         {
-            myAnimator.SetBool("isFiring", true);
+            isFiring = true;
+            firingTimer = 0.0f;
         }
-       else if(Input.GetMouseButtonUp(0)) 
+
+        if (isFiring)
         {
-            myAnimator.SetBool("isFiring", false);
-        } 
+            firingTimer += Time.deltaTime;
+
+            if (firingTimer < myAnimator.GetCurrentAnimatorStateInfo(0).length)
+            {
+                myAnimator.SetBool("isFiring", true);
+            }
+            else
+            {
+                myAnimator.SetBool("isFiring", false);
+                isFiring = false;
+            }
+        }
     }
+
+   
 
     private void CharacterMovement()
     {
